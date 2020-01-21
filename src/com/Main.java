@@ -1,12 +1,13 @@
 package com;
 
+import com.view.MainView;
 import com.view.SettingsView;
 
 import javax.swing.*;
 import java.applet.Applet;
 import java.awt.*;
 
-public class Main extends Applet {
+public class Main extends JApplet {
 
     private Panel currentView;
 
@@ -45,4 +46,8 @@ public class Main extends Applet {
         rootPane.updateUI();
     }
 
+    public void play() {
+        this.setSize(800, 600);
+        manageView(new MainView(this));
+    }
 }
