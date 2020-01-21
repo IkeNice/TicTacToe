@@ -28,13 +28,18 @@ public class SettingsView extends Panel {
         playStandart.setActionCommand(SettingsViewController.PLAY_VS_PLAYER);
         playStandart.addActionListener(this.controller);
 
-        topPanel.add(new JLabel("Row Length: "));
-
         slider = new JSlider(JSlider.HORIZONTAL, MIN_ROW_LENGTH, MAX_ROW_LENGTH, MIN_ROW_LENGTH);
         slider.setMajorTickSpacing(1);
         slider.setMinorTickSpacing(1);
         slider.setSnapToTicks(true);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
-    }
+
+        topPanel.add(new JLabel("Row Length: "));
+        topPanel.add(slider);
+        bottomPanel.add(playStandart);
+
+        this.add(topPanel);
+        this.add(bottomPanel);
+    } // end constructor SettingsView
 }
