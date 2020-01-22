@@ -8,49 +8,32 @@ import java.awt.*;
 
 public class SettingsView extends Panel {
 
-    private static final int MAX_ROW_LENGTH = 7;
-    private static final int MIN_ROW_LENGTH = 3;
     private JButton playWithComputer;
-    private JSlider slider;
-    private JButton playStandart;
+    private JButton playWithPlayer;
     private SettingsViewController controller;
 
     public SettingsView(Main parent) {
+        // создаем экземпляр класса-слушателя
         controller = new SettingsViewController(this, parent);
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        Panel topPanel = new Panel();
-        topPanel.setLayout(new FlowLayout());
+        // назаначаем менеджер компановки панели
+        this.setLayout(new FlowLayout());
 
-        Panel bottomPanel = new Panel();
-        bottomPanel.setLayout(new FlowLayout());
-
-        playStandart = new JButton("Player vs Player");
-        playStandart.setActionCommand(SettingsViewController.PLAY_VS_PLAYER);
-        playStandart.addActionListener(controller);
-
-        slider = new JSlider(JSlider.HORIZONTAL, MIN_ROW_LENGTH, MAX_ROW_LENGTH, MIN_ROW_LENGTH);
-        slider.setMajorTickSpacing(1);
-        slider.setMinorTickSpacing(1);
-        slider.setSnapToTicks(true);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-
+        // создаем экземпляр кнопок
+        playWithPlayer = new JButton("Player vs Player");
         playWithComputer = new JButton("Play vs Computer");
-        playWithComputer.setActionCommand(SettingsViewController.PLAY_VS_COMPUTER);
+
+        // ассоциируем кнопки с определенным действием
+        playWithPlayer.setActionCommand(SettingsViewController.PLAYER_VS_PLAYER);
+        playWithComputer.setActionCommand(SettingsViewController.PLAYER_VS_COMPUTER);
+
+        // добавляем слушатель для кнопок
+        playWithPlayer.addActionListener(controller);
         playWithComputer.addActionListener(controller);
 
-        topPanel.add(new JLabel("Row Length: "));
-        topPanel.add(slider);
-
-        bottomPanel.add(playStandart);
-        bottomPanel.add(playWithComputer);
-
-        this.add(topPanel);
-        this.add(bottomPanel);
+        // добавлем кнопки на панель
+        this.add(playWithPlayer);
+        this.add(playWithComputer);
     } // end constructor SettingsView
 
-    public int getSliderValue() {
-        return slider.getValue();
-    }
 }

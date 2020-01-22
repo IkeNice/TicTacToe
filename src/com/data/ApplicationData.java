@@ -6,15 +6,4 @@ public class ApplicationData {
 
     public static String playMode = PLAYER_VS_PLAYER;
 
-    private static int lineSize;
-
-    public static int getLineSize() {
-        return lineSize;
-    }
-
-    public static void setLineSize(int rowLength) {
-        lineSize = rowLength;
-    }
-
-
 }
