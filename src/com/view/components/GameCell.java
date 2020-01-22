@@ -4,8 +4,8 @@ import javax.swing.*;
 
 public class GameCell extends JButton {
 
-    private int cellY;
-    private int cellX;
+    public int cellY;
+    public int cellX;
 
     public GameCell(int cellX, int cellY) {
         this.cellX = cellX;

@@ -27,7 +27,7 @@ public class Main extends JApplet {
     } // end method init
 
     // инициализация панели выбора режима игры
-    private void setting() {
+    public void setting() {
         this.setSize(300, 40);
         manageView(new SettingsView(this));
     }

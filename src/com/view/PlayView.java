@@ -11,17 +11,18 @@ import java.awt.*;
 
 public class PlayView extends Panel {
 
-    private Font buttonFont;
-    private GameCell[][] cells;
     private PlayViewController controller;
 
+    private Panel topPanel;
     private Panel cellsPanel;
 
     private JButton playAgain;
     private JButton settings;
     private JLabel comment;
 
-    private Panel topPanel;
+    public GameCell[][] cells;
+
+    private Font buttonFont;
 
     public PlayView(Main parent) {
         // создаем экземпляр класса-слушателя
@@ -37,6 +38,10 @@ public class PlayView extends Panel {
         playAgain = new JButton("Play Again");
         settings = new JButton("Settings");
         comment = new JLabel();
+        // создаем экземпляр многомерного массива для кнопок-ячеек
+        cells = new GameCell[3][3];
+
+        buttonFont = new Font("Times New Roman", Font.PLAIN, 60);
 
         // назначаем менеджеры компоновок дополнительным панелям
         topPanel.setLayout(new FlowLayout());
@@ -79,7 +84,7 @@ public class PlayView extends Panel {
     } // end constructor PlayView
 
     // сброс состояния-ячеек на начальное
-    private void reset() {
+    public void reset() {
         // делаем ячейки активными
         setCellsEnabled(true);
 

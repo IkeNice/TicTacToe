@@ -6,6 +6,8 @@ public class ApplicationData {
     
     private static final String PLAYERX = "Player X";
     private static final String PLAYERO = "Player O";
+    private static final String PLAYERX_VALUE = "X";
+    private static final String PLAYERO_VALUE = "O";
 
     public static String playMode = PLAYER_VS_PLAYER;
     private static String currentPlayer;
@@ -18,8 +20,22 @@ public class ApplicationData {
     }
 
     // установка настроек игры по умолчанию
-    private static void setDefaultSettings() {
+    public static void setDefaultSettings() {
         currentPlayer = PLAYERX;
         gameOver = false;
     }
+
+    public static String getPlayerValue() {
+        switch (currentPlayer) {
+            case PLAYERX:
+                return PLAYERX_VALUE;
+
+            case PLAYERO:
+                return PLAYERO_VALUE;
+
+            default:
+                setDefaultSettings();
+                return getPlayerValue();
+        } // end switch
+    } // end getPlayerValue
 }
