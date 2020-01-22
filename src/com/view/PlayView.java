@@ -2,12 +2,15 @@ package com.view;
 
 import com.Main;
 import com.controller.PlayViewController;
+import com.sun.corba.se.impl.io.OptionalDataException;
+import com.view.components.GameCell;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class PlayView extends Panel {
 
+    private GameCell[][] cells;
     private PlayViewController controller;
 
     private Panel cellsPanel;
@@ -48,5 +51,12 @@ public class PlayView extends Panel {
         // Добавляем кнопки на дополнительную панель
         topPanel.add(playAgain);
         topPanel.add(settings);
-    } // end mconstructor PlayView
+
+        for (int i = 0; i < cells.length; i++){
+            for (int j = 0; j < cells.length; j++){
+                cells[i][j] = new GameCell(i, j);
+            }
+
+        }
+    } // end constructor PlayView
 }
