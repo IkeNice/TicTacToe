@@ -101,7 +101,7 @@ public class PlayView extends Panel {
     } // end method reset
 
     // устанавливаем примечание об очереди хода в поле комментария
-    private void setCurrentPlayerNote(String currentPlayerName) {
+    public void setCurrentPlayerNote(String currentPlayerName) {
         comment.setText(currentPlayerName + " your turn.");
     }
 
@@ -113,4 +113,27 @@ public class PlayView extends Panel {
             }
         }
     } // end method setCellsEnabled
+
+    // устанавливаем фон для строки с одинаковыми ячейками
+    public void setLineColor(GameCell[] line) {
+        for (GameCell cell : line){
+            cell.setBackground(Color.yellow);
+            cell.setOpaque(true);
+        }
+    } // end setLineColor
+
+    // установка неактивного состояния ячеек
+    public void setBlockState() {
+        setCellsEnabled(false);
+    }
+
+    // устанавливаем текст с поздравлением победителя
+    public void setWinnerText(String currentPlayerName) {
+        comment.setText(currentPlayerName.concat(" won! Congratulations!"));
+    }
+
+    // установка текста о ничье
+    public void setStalemateText() {
+        comment.setText("Stalemate! Try again!");
+    }
 }

@@ -10,8 +10,9 @@ public class ApplicationData {
     private static final String PLAYERO_VALUE = "O";
 
     public static String playMode = PLAYER_VS_PLAYER;
+
     private static String currentPlayer;
-    private static boolean gameOver;
+    public static boolean gameOver;
 
     // возвращаем имя текущего игрока
     public static String getCurrentPlayerName() {
@@ -38,4 +39,19 @@ public class ApplicationData {
                 return getPlayerValue();
         } // end switch
     } // end getPlayerValue
+
+    // смена хода игрока
+    public static void switchCurrentPlayer() {
+        switch (currentPlayer){
+            case PLAYERX:
+                currentPlayer = PLAYERO;
+                break;
+            case PLAYERO:
+                currentPlayer = PLAYERX;
+                break;
+            default:
+                setDefaultSettings();
+                break;
+        } // end switch
+    } // end switchCurrentPlayer
 }

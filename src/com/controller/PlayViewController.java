@@ -6,6 +6,7 @@ import com.view.PlayView;
 import com.view.components.GameCell;
 
 import java.awt.event.*;
+import java.util.Random;
 
 public class PlayViewController extends MouseAdapter implements MouseListener, ActionListener {
 
@@ -53,9 +54,34 @@ public class PlayViewController extends MouseAdapter implements MouseListener, A
 
         // если удалось установить значение в ячейку
         if (checkCell(curerntCell)){
+            // return, если игра оконена
+            if (ApplicationData.gameOver) return;
 
+            // ход компьютера, если режим игры PLAYER_VS_COMPUTER
+            if (ApplicationData.playMode == ApplicationData.PLAYER_VS_COMPUTER) computerTurn();
         }
-    }
+    } // end mouseClicked
+
+
+    // ход компьютера
+    private void computerTurn() {
+        boolean success = true;
+        int x, y;
+        GameCell currentCell;
+
+        do {
+            // генерация координат случайным образом
+            x = new Random().nextInt(3);
+            y = new Random().nextInt(3);
+
+            // назначаем ячейку по сгенирированным кооридинатам
+            currentCell = parent.cells[x][y];
+
+            // проверяем, удалось ли установить значение в ячейку
+            success = checkCell(currentCell);
+        // если установить значение не удалось, цикл повторяется
+        } while(!success);
+    } // end computerTurn
 
     // установка значения в ячейку
     private boolean checkCell(GameCell curerntCell) {
@@ -64,20 +90,64 @@ public class PlayViewController extends MouseAdapter implements MouseListener, A
             // установка в нее значение PLAYERX_VALUE либо PLAYERO_VALUE
             curerntCell.setText(ApplicationData.getPlayerValue());
 
-            // если был обнаружен победитель
+            // true, если был обнаружен победитель
             if (checkForWinner(curerntCell)) return true;
+            // true, если было зафиксирована ничья
+            if (checkStalemate()) return true;
+
+            // если победитель не обнаружен и остались
+            // пустые ячейки, меняем ход игрока
+            ApplicationData.switchCurrentPlayer();
+
+            // получаем значение переменной текущего игрока
+            // устанавливаем примечание об очереди хода в поле комментариев
+            parent.setCurrentPlayerNote(ApplicationData.getCurrentPlayerName());
+
+            return true;
         }
+        // false, так как установить значение в ячейку не удалось
+        return false;
+    } // end checkCell
+
+    // проверка статуса игры на ничью
+    private boolean checkStalemate() {
+        // false, если есть пустые ячейки
+        for (int i = 0; i < parent.cells.length; i++){
+            for (int j = 0; j < parent.cells[i].length; j++){
+                if (parent.cells[i][j].getText().equals("")) return false;
+            }
+        }
+
+        // делаем ячейки формы неактивными
+        parent.setBlockState();
+        // устанавливаем текст о ничье в поле комментария
+        parent.setStalemateText();
+
+        // изменение значения переменной статуса окончания игры
+        ApplicationData.gameOver = true;
+
         return true;
-    }
+    } // end checkStalemate
 
     // проверка наличия победителя
     private boolean checkForWinner(GameCell curerntCell) {
         // если строка заполнена одинаковыми ячейками
         if (findFullRow(curerntCell)){
+            // делаем ячейки формы неактивными
+            parent.setBlockState();
 
+            // получаем имя текущего игрока
+            // устанавливаеем текст с поздравлением в поле комментария
+            parent.setWinnerText(ApplicationData.getCurrentPlayerName());
+
+            // изменяем значение переменной статуса окончания игры
+            ApplicationData.gameOver = true;
+
+            return true;
         }
+        //false, если строка с одинаковыми ячейками отсутствует
         return false;
-    }
+    } // end checkForWinner
 
     // проверяем строки на равенство ячеек
     private boolean findFullRow(GameCell curerntCell) {
@@ -86,8 +156,50 @@ public class PlayViewController extends MouseAdapter implements MouseListener, A
 
         // получаем содержимое ячеек строки по горизонтали
         line = getLine(curerntCell, HOR_LINE);
+        // true, если значения ячеек горизонтальной строки равны
+        if (checkLine(line)) return true;
+
+        // получаем содержимое ячеек строки по вертикали
+        line = getLine(curerntCell, VER_LINE);
+        // true, если значения ячеек вертикальной строки равны
+        if (checkLine(line)) return true;
+
+        // получаем содержимое ячеек (0, 0); (1, 1); (2, 2)
+        line = getLine(curerntCell, DIAG_LINE);
+        // true, если значения ячеек (0, 0); (1, 1); (2, 2) равны
+        if (checkLine(line)) return true;
+
+        // получаем содержимое ячеек (0, 2); (1, 1); (2, 0)
+        line = getLine(curerntCell, OPP_DIAG_LINE);
+        // true, если значения ячеек (0, 2); (1, 1); (2, 0) равны
+        if (checkLine(line)) return true;
+
+        // false, если значения ячеек не равны ни по одной из строк
         return false;
-    }
+    } // end findFullRow
+
+    // проверка конкретной строки на равенство ячеек
+    private boolean checkLine(GameCell[] line) {
+        // false, если строка отсутствует
+        if (line == null) return false;
+
+        // получаем значение первой ячейки в строке
+        String symbol = line[0].getText();
+
+        // false, если первая ячейка в строке пустая
+        if (symbol.equals("")) return false;
+
+        // false, если ячейки строки имеют разные значения
+        for (int i = 0; i < line.length; i++){
+            if (line[i].getText() != symbol) return false;
+        }
+
+        // задаем фон строке с одинаковыми ячейками
+        parent.setLineColor(line);
+
+        // true, если значения ячеек равны и не пустые
+        return true;
+    } // end checkLine
 
     // возвращение содержимого ячееек определенной строки
     private GameCell[] getLine(GameCell curerntCell, String lineType) {
